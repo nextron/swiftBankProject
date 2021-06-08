@@ -44,11 +44,13 @@ class BankUser
         return false
     }
     //function for deposit money 
-    func deposit(amount: Double) -> Double
-    {     
-        self.balance = self.balance + amount 
-        return self.balance   
-    } 
+    func Deposit(amount: Double, balance: [BankUser]) -> Double
+    {
+     
+    self.balance = self.balance + amount 
+    return self.balance
+    
+    }  
     
     //function for withdraw money 
      func withdraw(amount: Double) { 
@@ -118,41 +120,25 @@ func subMenu(){
                 choice = Int(choiceInt)!        
                 switch choice {
                 case 1:
-                    userObj.displaybalance()               
-                case 2:
+                    userObj.displaybalance()              
+                case 2:                   
                     userObj.displaybalance()
                     print("Enter the amount you would like to deposit: ")
-                    var amountStr = readLine()!
-                    if(Double(amountStr) == nil){
-                        repeat{
-                            print("Please provide a valid amount:")
-                            amountStr  = readLine()!
-                        }while(Double(amountStr) == nil)
-                    }
-                    let amount = Double(amountStr)!
+                    let amount = Double(readLine()!)!
                     print("Deposited amount is: ",amount)
-                    print("Now, Current balance is: ",userObj.deposit(amount: amount))
-                    print("Press Enter to return to the Menu")
-                    _ = readLine()!
+                    print("Now, Current balance is: ",userObj.Deposit(amount: amount,balance: userList))
+                    break
+                   
                 case 3:
                     userObj.displaybalance()
                     repeat{
                         print("Enter the amount you would like to withdraw: ")
-                        var amountStr = readLine()!
-                        if(Double(amountStr) == nil){
-                            repeat{
-                                print("Please provide a valid amount:")
-                                amountStr  = readLine()!
-                            }while(Double(amountStr) == nil)
-                        }
-                        let amount = Double(amountStr)!
+                        let amount = Double(readLine()!)!
                         if userObj.checkBalance(amount: amount) {
-                            userObj.withdraw(amount: amount)
-                            print("Withdraw for \(amount) has been done.")
-                            print("Press Enter to return to the Menu")
-                            _ = readLine()!
-                            break
-                        }else{
+                        userObj.withdraw(amount: amount)
+                        print("press Enter to return to the Menu")
+                        break
+                        }else{ 
                             print("Insufficient Balanace , do you want to change the amount?yes/no")
                         }
                     }while (readLine()! == "yes" )                    
@@ -160,26 +146,17 @@ func subMenu(){
                     print("Transfered money to other account")
                     //Manpreet
                 case 5:
-                    userObj.displaybalance()
-                        print("Enter the bill amount to pay")
-                        var amountStr = readLine()!
-                        if(Double(amountStr) == nil){
-                            repeat{
-                                print("Please provide a valid amount:")
-                                amountStr  = readLine()!
-                            }while(Double(amountStr) == nil)
-                        }                        
-                        let amount = Double(amountStr)!
-                        if userObj.checkBalance(amount: amount){
+                      userObj.displaybalance()
+                        print("enter the bill amount to pay")
+                         let amount = Double(readLine()!)!
+                           if userObj.checkBalance(amount: amount) {
                             userObj.withdraw(amount: amount)
-                            print("The bill was paid")
-                            print("Press Enter to return to the Menu")
-                            _ = readLine()!                            
-                        }else{ 
-                            print("Insufficient Balanace")
-                            print("Press Enter to return to the Menu")
-                            _ = readLine()!                            
-                        }                   
+                            print("the bill was paid ")
+                            break 
+                            }
+                             else { print("Insufficient Balanace")
+                            } 
+                            break
                 case 6:
                     print("Logout")
                     logout()
@@ -286,3 +263,4 @@ func landingMenu(){
     }while(flag.lowercased() == "yes")
 }
 landingMenu()
+
