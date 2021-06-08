@@ -54,8 +54,7 @@ class BankUser
      func withdraw(amount: Double) { 
       self.balance -= amount 
       print("your Current Balance:" , self.balance) 
-    } 
-    
+    }    
 }
 
 
