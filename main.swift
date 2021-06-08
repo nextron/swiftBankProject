@@ -107,6 +107,23 @@ func registerUser(userName: String, password: String, gender: String, mobileNo: 
     return false
 }
 
+//Fucntion to Check Account existance
+func checkAccountExists(accountNo: Int) -> BankUser{
+    for user in userList{
+        if(user.accountNo == accountNo){
+            return user
+        }
+    }
+    return BankUser(userID:0,accountNo:0,userName:"",password:"",gender:"",mobileNo:0,accountType:"",balance:0)
+}
+
+//Function to transfer Money
+func transferFunds(sender: BankUser, reciever: BankUser, amount: Double) -> Double{
+    sender.balance -= amount
+    reciever.balance += amount
+    return (sender.balance)
+}
+
 //Sub Menu. This will appear once user log in
 func subMenu(){
     var choice = 0
@@ -157,29 +174,74 @@ func subMenu(){
                         }
                     }while (readLine()! == "yes" )                    
                 case 4:
-                    print("Transfered money to other account")
-                    //Manpreet
-                case 5:
-                    userObj.displaybalance()
-                        print("Enter the bill amount to pay")
+                    //working on it
+                    print("Please enter the account number to which you want to send money.")
+                    var accountStr = readLine()!
+                    if(Int(accountStr) == nil){
+                        repeat{
+                            print("Please provide a valid account Number:")
+                            accountStr = readLine()!
+                        }while(Int(accountStr) == nil)
+                    }
+                    let accountNo = Int(accountStr)!
+                    let recievingUser = checkAccountExists(accountNo: accountNo)
+                    if(recievingUser.userID == 0){
+                        print("The account number that you provided doesn't exists")
+                        print("You are being redirected to the menu.")
+                        break                       
+                    }else if(recievingUser.userID == userObj.userID){
+                        print("You cannot transfer funds to yourself.")
+                        print("You are being redirected to the menu.")
+                        break
+                    }
+                    print("Please confirm if you want to send money to \(recievingUser.userName)")
+                    print("Type yes and press enter to confirm.")
+                    let userConfirmation = readLine()!
+                    if(userConfirmation != "yes"){
+                        print("You are being redirected to the menu.")
+                        break
+                    }else{
+                        userObj.displaybalance()
+                        print("Please enter the amount you want to send:")
                         var amountStr = readLine()!
                         if(Double(amountStr) == nil){
                             repeat{
-                                print("Please provide a valid amount:")
-                                amountStr  = readLine()!
+                                print("Please provide a valid amount.")
+                                amountStr = readLine()!
                             }while(Double(amountStr) == nil)
-                        }                        
+                        }
                         let amount = Double(amountStr)!
-                        if userObj.checkBalance(amount: amount){
-                            userObj.withdraw(amount: amount)
-                            print("The bill was paid")
+                        if(userObj.checkBalance(amount: amount)){
+                            print("Transfer has been done. Updated balance is:",(transferFunds(sender: userObj, reciever: recievingUser, amount: amount)))
                             print("Press Enter to return to the Menu")
-                            _ = readLine()!                            
-                        }else{ 
+                            _ = readLine()!                        
+                        }else{
                             print("Insufficient Balanace")
                             print("Press Enter to return to the Menu")
-                            _ = readLine()!                            
-                        }                   
+                            _ = readLine()!  
+                        }
+                    }
+                case 5:
+                    userObj.displaybalance()
+                    print("Enter the bill amount to pay")
+                    var amountStr = readLine()!
+                    if(Double(amountStr) == nil){
+                        repeat{
+                            print("Please provide a valid amount:")
+                            amountStr  = readLine()!
+                        }while(Double(amountStr) == nil)
+                    }                        
+                    let amount = Double(amountStr)!
+                    if userObj.checkBalance(amount: amount){
+                        userObj.withdraw(amount: amount)
+                        print("The bill was paid")
+                        print("Press Enter to return to the Menu")
+                        _ = readLine()!                            
+                    }else{ 
+                        print("Insufficient Balanace")
+                        print("Press Enter to return to the Menu")
+                        _ = readLine()!                            
+                    }                   
                 case 6:
                     print("Logout")
                     logout()
