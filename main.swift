@@ -101,6 +101,7 @@ func registerUser(userName: String, password: String, gender: String, mobileNo: 
             accountNo = (userList[userList.count - 1].accountNo) + 1
         }
         userList.append(BankUser(userID:userID,accountNo:accountNo,userName:userName,password:password,gender:gender,mobileNo:mobileNo,accountType:accountType,balance:balance))
+        print("Your User ID is: \(userID) and Account No. is: \(accountNo)")
         return true
     }
     return false
@@ -322,10 +323,11 @@ func landingMenu(){
                 let mobileNo = Int(stringMobileNo)!
                 //Account Type and it's validation
                 print("Please provide Account type(Saving/Current):")
-                let accountType = readLine()!
+                var accountType = readLine()!
                 if(!(accountType == "Saving" || accountType == "Current")){
                     repeat{
                         print("Please provide a valid Account Type:\nCan be either Saving or Current")
+                        accountType = readLine()!
                     }while(!(accountType == "Saving" || accountType == "Current"))
                 }
                 let balance = 0.0
